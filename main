@@ -1,0 +1,68 @@
+"""
+Hier komt de engine. It will be responsible for handling user input and displaying the current GameState object.
+"""
+
+import pygame as p
+import ChessEngine
+
+WIDTH = HEIGHT = 512 #400 is ook goed
+DIMENSION = 8 #dimension of chessboard is 8x8
+SQ_SIZE = HEIGHT // DIMENSION
+MAX_FPS = 15 #for animations
+IMAGES = {}
+
+'''
+Initialize a global dictionary of images. This will be called exactly once in the main
+'''
+def loadImages():
+    pieces = ['wp', 'wR', 'wN', 'wB', 'wQ', 'wK', 'bp', 'bR', 'bB', 'bN', 'bQ', 'bK']
+    for piece in pieces:
+        IMAGES[piece] = p.transform.scale(p.image.load("images/" + piece + ".png"), (SQ_SIZE, SQ_SIZE))
+    #Note: we can access an image by saying 'IMAGES['wp']'
+
+'''
+This will be the main driver for our code. This will handle user input and handle the graphics
+'''
+def main():
+    p.init()
+    screen = p.display.set_mode((WIDTH, HEIGHT))
+    clock = p.time.Clock()
+    screen.fill(p.Color("white"))
+    gs = ChessEngine.GameState()
+    LoadImages() #1x doen
+    running = True
+    while running:
+        for e in p.event.get():
+            if e.type == p.QUIT:
+                running = False
+        clock.tick(MAX_FPS)
+        p.display.flip()
+        drawGameState(screen, gs)
+
+'''
+Tekent de vakjes
+'''
+def drawGameState(screen, gs):
+    drawBoard(screen) #squares
+    drawPieces(screen, gs.board) #pieces
+
+
+
+'''
+Tekent vakjes
+'''
+def drawBoard(screen):
+    colors = [p.Color("white"), p.Color("grey")]
+    for r in range(DIMENSION):
+        for c in range(DIMENSION):
+            color = colors[((r+c) % 2)]
+            p.draw.rect(screen, color, p.Rect(c*SQ_SIZE, r*SQ_SIZE, SQ_SIZE, SQ_SIZE))
+
+'''
+Tekent de stukken
+'''
+def drawPieces(screen, board):
+    pass
+
+if __name__ == " main ":
+    main()
